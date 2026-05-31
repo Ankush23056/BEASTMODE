@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Beastmode" />
+    <meta name="theme-color" content="#A3E635" />
+    <meta name="description" content="Elite workout tracking with progressive overload, weekly splits, and performance history." />
+
+    <title>BEASTMODE</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/pwa-192x192.png" />
+    <link rel="apple-touch-icon" href="/pwa-192x192.png" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CDN (pinned) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              'orbitron': ['Orbitron', 'sans-serif'],
+            },
+            colors: {
+              'brand-primary': 'var(--color-brand-primary)',
+              'brand-secondary': 'var(--color-brand-secondary)',
+              'brand-alert': 'var(--color-brand-alert)',
+              'brand-orange': 'var(--color-brand-orange)',
+              'base-100': 'var(--color-base-100)',
+              'base-200': 'var(--color-base-200)',
+              'base-300': 'var(--color-base-300)',
+              'content-100': 'var(--color-content-100)',
+              'content-200': 'var(--color-content-200)',
+            },
+          },
+        },
+      }
+    </script>
+
+    <!-- Theme CSS Variables -->
+    <style id="theme-variables">
+      [data-theme="beast"] {
+        --color-brand-primary: #A3E635; --color-brand-secondary: #82b82a; --color-brand-alert: #EF4444;
+        --color-brand-orange: #FF9500; --color-base-100: #121212; --color-base-200: rgba(45, 45, 45, 0.6);
+        --color-base-300: rgba(255, 255, 255, 0.1); --color-content-100: #FFFFFF; --color-content-200: #94a3b8;
+      }
+      [data-theme="cyber_ocean"] {
+        --color-brand-primary: #5BC0BE; --color-brand-secondary: #4a9d9b; --color-brand-alert: #EF4444;
+        --color-brand-orange: #FF9500; --color-base-100: #1C2541; --color-base-200: #3b6570;
+        --color-base-300: #345a64; --color-content-100: #FFFFFF; --color-content-200: #BCCCDC;
+      }
+      [data-theme="retro_neon"] {
+        --color-brand-primary: #cc59d2; --color-brand-secondary: #9046cf; --color-brand-alert: #EF4444;
+        --color-brand-orange: #FF9500; --color-base-100: #1c0f2b; --color-base-200: rgba(144, 70, 207, 0.2);
+        --color-base-300: rgba(204, 89, 210, 0.2); --color-content-100: #fff3f0; --color-content-200: #f487b6;
+      }
+      [data-theme="nordic_fog"] {
+        --color-brand-primary: #798071; --color-brand-secondary: #999ac6; --color-brand-alert: #EF4444;
+        --color-brand-orange: #FF9500; --color-base-100: #eef0f5; --color-base-200: rgba(210, 213, 221, 0.6);
+        --color-base-300: rgba(184, 186, 207, 0.5); --color-content-100: #333333; --color-content-200: #666666;
+      }
+      [data-theme="alpine_lake"] {
+        --color-brand-primary: #c6ebbe; --color-brand-secondary: #95b2b0; --color-brand-alert: #EF4444;
+        --color-brand-orange: #FF9500; --color-base-100: #0f172a; --color-base-200: rgba(100, 122, 163, 0.2);
+        --color-base-300: rgba(149, 178, 176, 0.2); --color-content-100: #f1f5f9; --color-content-200: #94a3b8;
+      }
+      [data-theme="earthen_core"] {
+        --color-brand-primary: #82a6b1; --color-brand-secondary: #76877d; --color-brand-alert: #EF4444;
+        --color-brand-orange: #FF9500; --color-base-100: #291d11; --color-base-200: rgba(114, 105, 83, 0.3);
+        --color-base-300: rgba(118, 135, 125, 0.2); --color-content-100: #f5f5f4; --color-content-200: #a8a29e;
+      }
+      .rest-day-theme {
+        --color-brand-primary: #38bdf8;
+      }
+    </style>
+
+    <!-- Scrollbar Hide -->
+    <style>
+      main::-webkit-scrollbar { display: none; }
+      main { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+
+    <!-- Theme flash prevention (must run before React) -->
+    <script>
+      (function() {
+        const savedTheme = localStorage.getItem('fitnessApp_activeTheme') || 'beast';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      })();
+    </script>
+
+    <!-- ESM Import Map -->
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^18.2.0/",
+    "react/": "https://esm.sh/react@^18.2.0/",
+    "react": "https://esm.sh/react@^18.2.0",
+    "zustand": "https://esm.sh/zustand@^4.5.2",
+    "recharts": "https://esm.sh/recharts@^2.12.7",
+    "framer-motion": "https://esm.sh/framer-motion@^11.2.10",
+    "@dnd-kit/core": "https://esm.sh/@dnd-kit/core@6.1.0",
+    "@dnd-kit/sortable": "https://esm.sh/@dnd-kit/sortable@8.0.0",
+    "@dnd-kit/utilities": "https://esm.sh/@dnd-kit/utilities@3.2.2",
+    "canvas-confetti": "https://esm.sh/canvas-confetti@^1.9.3"
+  }
+}
+  </script>
+  <link rel="stylesheet" href="/index.css">
+  </head>
+  <body class="bg-base-100 text-content-100 overflow-x-hidden">
+    <div id="root"></div>
+    <script type="module" src="/index.jsx"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/sw.js')
+            .catch(function() {
+              // SW registration failed silently — app still fully functional
+            });
+        });
+      }
+    </script>
+  </body>
+</html>

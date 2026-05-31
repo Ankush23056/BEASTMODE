@@ -1,0 +1,27 @@
+{
+  "name": "BEASTMODE Workout Tracker",
+  "short_name": "Beastmode",
+  "description": "Elite workout tracking and progressive overload system for serious athletes.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#121212",
+  "theme_color": "#A3E635",
+  "categories": ["fitness", "health", "sports"],
+  "icons": [
+    {
+      "src": "/pwa-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
+}
