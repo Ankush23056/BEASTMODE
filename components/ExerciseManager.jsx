@@ -86,29 +86,33 @@ const SortableExerciseItem = ({
     return (
         <div ref={setNodeRef} style={style} className={containerClasses}>
             {/* Header Row: Drag, Name, Delete... and Link Superset */}
-            <div className="flex items-center gap-3 mb-5">
-                <div {...attributes} {...listeners} className="cursor-grab touch-none text-content-300 hover:text-content-100 transition-colors">
-                    <GripVerticalIcon className="w-5 h-5" />
+            <div className="flex flex-wrap items-center justify-between gap-2 w-full mb-5">
+                <div className="flex items-center gap-3">
+                    <div {...attributes} {...listeners} className="cursor-grab touch-none text-content-300 hover:text-content-100 transition-colors">
+                        <GripVerticalIcon className="w-5 h-5" />
+                    </div>
+                    <input
+                        type="text"
+                        value={exercise.name}
+                        onChange={(e) => onUpdate('name', e.target.value)}
+                        placeholder="Exercise Name"
+                        className="flex-grow bg-transparent text-lg text-content-100 font-bold focus:outline-none placeholder-content-300 truncate max-w-[150px] sm:max-w-none"
+                    />
                 </div>
-                <input
-                    type="text"
-                    value={exercise.name}
-                    onChange={(e) => onUpdate('name', e.target.value)}
-                    placeholder="Exercise Name"
-                    className="flex-grow bg-transparent text-lg text-content-100 font-bold focus:outline-none placeholder-content-300"
-                />
-                {hasNext && (
-                    <button 
-                        onClick={onToggleSuperset} 
-                        className={`whitespace-nowrap flex-shrink-0 text-[10px] font-mono font-bold tracking-widest px-2 py-1 flex items-center gap-1 rounded transition-colors ${isLinkedToNext ? 'bg-[#99ff00]/10 text-[#99ff00] border border-[#99ff00]/30' : 'text-content-300 hover:bg-base-300/50 border border-transparent'}`}
-                    >
-                        <LinkIcon className="w-3 h-3 flex-shrink-0" />
-                        {isLinkedToNext ? 'LINKED' : 'LINK SUPERSET'}
+                <div className="flex items-center gap-3 ml-auto">
+                    {hasNext && (
+                        <button 
+                            onClick={onToggleSuperset} 
+                            className={`whitespace-nowrap flex-shrink-0 text-[10px] font-mono font-bold tracking-widest px-2 py-1 flex items-center gap-1 rounded transition-colors ${isLinkedToNext ? 'bg-[#99ff00]/10 text-[#99ff00] border border-[#99ff00]/30' : 'text-content-300 hover:bg-base-300/50 border border-transparent'}`}
+                        >
+                            <LinkIcon className="w-3 h-3 flex-shrink-0" />
+                            {isLinkedToNext ? 'LINKED' : 'LINK SUPERSET'}
+                        </button>
+                    )}
+                    <button onClick={onRemove} className="text-content-300 hover:text-brand-alert transition-colors p-1">
+                        <TrashIcon className="w-5 h-5" />
                     </button>
-                )}
-                <button onClick={onRemove} className="text-content-300 hover:text-brand-alert transition-colors p-1">
-                    <TrashIcon className="w-5 h-5" />
-                </button>
+                </div>
             </div>
 
             {/* Intensity Row */}
