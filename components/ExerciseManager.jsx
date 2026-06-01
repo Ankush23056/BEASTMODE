@@ -86,9 +86,9 @@ const SortableExerciseItem = ({
     return (
         <div ref={setNodeRef} style={style} className={containerClasses}>
             {/* Header Row: Drag, Name, Delete... and Link Superset */}
-            <div className="flex flex-wrap items-center justify-between gap-2 w-full mb-5">
-                <div className="flex items-center gap-3">
-                    <div {...attributes} {...listeners} className="cursor-grab touch-none text-content-300 hover:text-content-100 transition-colors">
+            <div className="flex flex-row items-center justify-between w-full min-w-0 mb-5">
+                <div className="flex items-center gap-2 min-w-0 shrink">
+                    <div {...attributes} {...listeners} className="cursor-grab touch-none text-content-300 hover:text-content-100 transition-colors shrink-0">
                         <GripVerticalIcon className="w-5 h-5" />
                     </div>
                     <input
@@ -96,14 +96,14 @@ const SortableExerciseItem = ({
                         value={exercise.name}
                         onChange={(e) => onUpdate('name', e.target.value)}
                         placeholder="Exercise Name"
-                        className="flex-grow bg-transparent text-lg text-content-100 font-bold focus:outline-none placeholder-content-300 truncate max-w-[150px] sm:max-w-none"
+                        className="bg-transparent text-sm sm:text-base md:text-lg text-content-100 font-bold focus:outline-none placeholder-content-300 truncate min-w-0 w-full"
                     />
                 </div>
-                <div className="flex items-center gap-3 ml-auto">
+                <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-auto">
                     {hasNext && (
                         <button 
                             onClick={onToggleSuperset} 
-                            className={`flex-shrink-0 text-[10px] font-mono font-bold tracking-widest px-2 py-1 flex items-center gap-1 rounded transition-colors ${isLinkedToNext ? 'bg-[#99ff00]/10 text-[#99ff00] border border-[#99ff00]/30' : 'text-content-300 hover:bg-base-300/50 border border-transparent'}`}
+                            className={`flex-shrink-0 text-[9px] sm:text-[10px] leading-none uppercase font-mono font-bold tracking-wider px-2 py-1 flex items-center gap-1 rounded transition-colors ${isLinkedToNext ? 'bg-[#99ff00]/10 text-[#99ff00] border border-[#99ff00]/30' : 'text-content-300 hover:bg-base-300/50 border border-transparent'}`}
                         >
                             <LinkIcon className="w-3 h-3 flex-shrink-0" />
                             {isLinkedToNext ? (
@@ -116,7 +116,7 @@ const SortableExerciseItem = ({
                             )}
                         </button>
                     )}
-                    <button onClick={onRemove} className="text-content-300 hover:text-brand-alert transition-colors p-1">
+                    <button onClick={onRemove} className="text-content-300 hover:text-brand-alert transition-colors p-1 shrink-0">
                         <TrashIcon className="w-5 h-5" />
                     </button>
                 </div>
