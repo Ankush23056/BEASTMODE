@@ -240,13 +240,13 @@ const ExerciseItem = (props) => {
                   );
                 })}
               </div>
-              <div className="mt-3 pt-3 border-t border-base-300">
-                  <input 
-                      type="text" 
+              <div className="mt-3">
+                  <input
+                      type="text"
                       placeholder="Note for next session..."
                       value={exerciseNotes[originalExerciseId]?.text || ''}
                       onChange={(e) => saveExerciseNote(originalExerciseId, e.target.value)}
-                      className="w-full bg-transparent text-content-100 placeholder:text-content-200/60 text-sm font-mono p-3 rounded border border-brand-primary/40 focus:border-brand-primary focus:outline-none transition-colors"
+                      className="w-full bg-transparent text-content-100 placeholder:text-content-300/50 text-xs font-mono px-3 py-2 rounded-lg border border-base-300 focus:border-content-200/40 focus:outline-none transition-colors"
                   />
               </div>
             </div>

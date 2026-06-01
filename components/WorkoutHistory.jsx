@@ -97,11 +97,12 @@ const LogItem = ({ log, splits }) => {
                                                 if (!perf) return null;
 
                                                 const note = exerciseNotes[originalId]?.text || '';
+                                                const hasRealNote = note.trim() !== '' && note.trim() !== 'Note for next session...';
 
                                                 return (
                                                     <div key={originalId} className="text-sm">
                                                         <p className="font-semibold text-content-100 mb-1">{displayedExercise.name}</p>
-                                                        <div className="pl-2 text-content-200 mb-2">
+                                                        <div className="pl-2 text-content-200 mb-1">
                                                             {(perf?.sets || []).map((s, i) => {
                                                                 if (!s) return null;
                                                                 const dt = s.dropSets?.[0];
@@ -113,13 +114,11 @@ const LogItem = ({ log, splits }) => {
                                                                 );
                                                             })}
                                                         </div>
-                                                        <input 
-                                                            type="text" 
-                                                            placeholder="Note for next session..."
-                                                            value={note}
-                                                            onChange={(e) => saveExerciseNote(originalId, e.target.value)}
-                                                            className="w-full bg-transparent text-brand-primary placeholder:text-brand-primary/50 text-xs font-mono p-2 mt-1 rounded border border-brand-primary/30 focus:border-brand-primary focus:outline-none transition-colors"
-                                                        />
+                                                        {hasRealNote && (
+                                                            <p className="pl-2 text-xs text-content-200 font-mono mt-0.5">
+                                                                → {note}
+                                                            </p>
+                                                        )}
                                                     </div>
                                                 );
                                             })}

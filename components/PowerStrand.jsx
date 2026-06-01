@@ -29,15 +29,15 @@ const PowerStrand = ({ history, currentLog, sessionState, splits, schedule }) =>
 
     // Merge history with current log if needed
     const fullHistory = useMemo(() => {
+        const safeHistory = Array.isArray(history) ? history : [];
         if (currentLog && currentLog.date) {
-            const exists = history.some(h => h.date === currentLog.date);
+            const exists = safeHistory.some(h => h.date === currentLog.date);
             if (!exists) {
-                // Only add if it has some performance data
-                const hasData = Object.keys(currentLog.performance).length > 0;
-                if (hasData) return [...history, currentLog];
+                const hasData = Object.keys(currentLog.performance || {}).length > 0;
+                if (hasData) return [...safeHistory, currentLog];
             }
         }
-        return history;
+        return safeHistory;
     }, [history, currentLog]);
 
     // Helper to check if a log is complete based on the schedule
@@ -65,7 +65,10 @@ const PowerStrand = ({ history, currentLog, sessionState, splits, schedule }) =>
     // 2. Determine status for each day
     const dayStatus = useMemo(() => {
         // Find max volume in history to determine PR
-        const maxVolume = fullHistory.reduce((max, log) => Math.max(max, log.totalVolume || 0), 0);
+        const maxVolume = (Array.isArray(fullHistory) ? fullHistory : []).reduce(
+            (max, log) => Math.max(max, log?.totalVolume || 0),
+            0
+        );
         const today = getTodayDateString();
 
         return weekDays.map(dateStr => {
