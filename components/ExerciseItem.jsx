@@ -196,12 +196,12 @@ const ExerciseItem = (props) => {
                   <p className="text-xs font-bold text-content-200 uppercase flex-1 text-center">Reps</p>
                   <div className="w-24" />
               </div>
-              <div className="space-y-2">
+              <div className="space-y-1">
                 {setsData.map((set, index) => {
                   const logged = isSetLogged(index);
                   const ph = getPlaceholders(index);
                   return (
-                      <div key={index} className="flex flex-col gap-2 bg-base-300/30 p-2 rounded-xl">
+                      <div key={index} className="flex flex-col gap-1 bg-base-300/30 py-1 px-2 rounded-xl">
                           <div className="flex items-stretch gap-2">
                             <span className={`w-12 flex items-center justify-center font-mono font-bold transition-colors ${logged ? 'text-brand-primary' : 'text-content-100'}`}>{index + 1}</span>
                             <input ref={el => weightInputRefs.current[index] = el} type="text" inputMode="decimal" pattern="[0-9]*[.]?[0-9]*" placeholder={ph.pWeight} value={set.weight} onChange={(e) => handleSetChange(index, 'weight', e.target.value)} disabled={logged} className="w-full bg-base-300 text-content-100 rounded-lg p-2 text-center font-mono text-lg disabled:opacity-50 placeholder-content-300/50" />
@@ -239,14 +239,6 @@ const ExerciseItem = (props) => {
                       </div>
                   );
                 })}
-              </div>
-              <div className="mt-2 flex justify-center">
-                  <button 
-                      onClick={() => updateExerciseInSession(originalExerciseId, { sets: (numSets + 1).toString() })} 
-                      className="text-xs font-bold text-content-200 uppercase bg-base-300 px-3 py-1 flex items-center gap-1 rounded hover:bg-base-300/80 hover:text-content-100 transition-colors"
-                  >
-                      + ADD SET
-                  </button>
               </div>
               <div className="mt-3 pt-3 border-t border-base-300">
                   <input 
