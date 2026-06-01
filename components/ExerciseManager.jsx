@@ -103,10 +103,17 @@ const SortableExerciseItem = ({
                     {hasNext && (
                         <button 
                             onClick={onToggleSuperset} 
-                            className={`whitespace-nowrap flex-shrink-0 text-[10px] font-mono font-bold tracking-widest px-2 py-1 flex items-center gap-1 rounded transition-colors ${isLinkedToNext ? 'bg-[#99ff00]/10 text-[#99ff00] border border-[#99ff00]/30' : 'text-content-300 hover:bg-base-300/50 border border-transparent'}`}
+                            className={`flex-shrink-0 text-[10px] font-mono font-bold tracking-widest px-2 py-1 flex items-center gap-1 rounded transition-colors ${isLinkedToNext ? 'bg-[#99ff00]/10 text-[#99ff00] border border-[#99ff00]/30' : 'text-content-300 hover:bg-base-300/50 border border-transparent'}`}
                         >
                             <LinkIcon className="w-3 h-3 flex-shrink-0" />
-                            {isLinkedToNext ? 'LINKED' : 'LINK SUPERSET'}
+                            {isLinkedToNext ? (
+                                <span>LINKED</span>
+                            ) : (
+                                <div className="flex flex-col text-left leading-none gap-0.5">
+                                    <span>LINK</span>
+                                    <span>SUPERSET</span>
+                                </div>
+                            )}
                         </button>
                     )}
                     <button onClick={onRemove} className="text-content-300 hover:text-brand-alert transition-colors p-1">
