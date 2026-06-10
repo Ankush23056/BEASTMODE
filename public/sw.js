@@ -1,6 +1,6 @@
 // BEASTMODE Service Worker — Cache-First + CDN Caching for True Offline PWA
 // Cache version — bump this when deploying new builds
-const CACHE_VERSION = 'beastmode-v4';
+const CACHE_VERSION = 'beastmode-v5';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const CDN_CACHE = `${CACHE_VERSION}-cdn`;
 
@@ -55,29 +55,32 @@ self.addEventListener('fetch', (event) => {
   // ── Navigation requests: always serve the SPA shell ───────────────────────
   // The app uses Zustand in-memory routing (setActiveView), not URL-based
   // routing. Any navigate request must resolve to index.html so React can
-  // boot and handle the view. This prevents blank screens on offline refresh
-  // or hard navigation to any path on the domain.
+  // boot and handle the view. This prevents blank screens on offline refresh,
+  // hard navigation, tab-switching while offline, or any unmatched route.
   if (isSameOrigin && request.mode === 'navigate') {
     event.respondWith(
-      fetch(request)
-        .then((response) => {
-          // Online: serve fresh shell and update cache
+      (async () => {
+        try {
+          const response = await fetch(request);
+          // Online + valid response: cache and return
           if (response && response.ok) {
             const clone = response.clone();
-            caches.open(STATIC_CACHE).then((cache) => cache.put(request, clone));
+            caches.open(STATIC_CACHE).then((cache) => cache.put('/index.html', clone));
+            return response;
           }
-          return response;
-        })
-        .catch(() =>
-          // Offline: always return the cached index.html — never a blank page
-          caches.match('/index.html').then((shell) => {
-            if (shell) return shell;
-            // Last resort: bare minimal response to prevent a browser error page
-            return new Response('<html><body><div id="root"></div></body></html>', {
-              headers: { 'Content-Type': 'text/html' },
-            });
-          })
-        )
+          // Online but non-ok (captive portal, soft-404, etc.) → fall to cache
+          throw new Error(`Non-ok response: ${response?.status}`);
+        } catch (_err) {
+          // Offline or any network/response error: always return the cached shell
+          const shell = await caches.match('/index.html');
+          if (shell) return shell;
+          // Absolute last resort — prevent browser error page from showing
+          return new Response(
+            '<!DOCTYPE html><html><head><meta charset="utf-8"/></head><body><div id="root"></div><script>window.__SW_OFFLINE__=true;</script></body></html>',
+            { headers: { 'Content-Type': 'text/html; charset=utf-8' } }
+          );
+        }
+      })()
     );
     return;
   }

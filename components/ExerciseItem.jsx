@@ -25,6 +25,10 @@ const ExerciseItem = (props) => {
       .find(log => log.performance && log.performance[originalExerciseId])
       ?.performance[originalExerciseId];
 
+  // The stored note from exerciseNotes is the PREVIOUS session's note — display
+  // it read-only. The interactive input always starts blank for the new session.
+  const previousNote = exerciseNotes[originalExerciseId]?.text || null;
+
   const getPlaceholders = (index) => {
       const historicalSet = pastLogForExercise?.sets[index];
       const fbWeight = suggestion?.weight?.toString() ?? exercise.weight?.toString() ?? '0';
@@ -56,6 +60,9 @@ const ExerciseItem = (props) => {
   });
 
   const [setsData, setSetsData] = useState(initialSets);
+  // Session note: always starts empty — never carries over from previous weeks.
+  // The previousNote (read-only) is derived separately from stored exerciseNotes.
+  const [sessionNote, setSessionNote] = useState('');
   const weightInputRefs = useRef([]);
   const repsInputRefs = useRef([]);
 
@@ -190,6 +197,13 @@ const ExerciseItem = (props) => {
                   {suggestion.note}
                 </div>
               )}
+              {/* ── Previous week's note — read-only, borderless, arrow-prefixed ── */}
+              {previousNote && (
+                <p className="text-xs text-content-300 font-mono mb-3 leading-relaxed flex items-start gap-1.5">
+                  <span className="mt-px shrink-0">→</span>
+                  <span>{previousNote}</span>
+                </p>
+              )}
               <div className="flex justify-between items-center mb-2">
                   <p className="text-xs font-bold text-content-200 uppercase w-12 text-center">Set</p>
                   <p className="text-xs font-bold text-content-200 uppercase flex-1 text-center">Weight (kg)</p>
@@ -244,8 +258,11 @@ const ExerciseItem = (props) => {
                   <input
                       type="text"
                       placeholder="Note for next session..."
-                      value={exerciseNotes[originalExerciseId]?.text || ''}
-                      onChange={(e) => saveExerciseNote(originalExerciseId, e.target.value)}
+                      value={sessionNote}
+                      onChange={(e) => {
+                          setSessionNote(e.target.value);
+                          saveExerciseNote(originalExerciseId, e.target.value);
+                      }}
                       className="w-full bg-transparent text-content-100 placeholder:text-content-300/50 text-xs font-mono px-3 py-2 rounded-lg border border-base-300 focus:border-content-200/40 focus:outline-none transition-colors"
                   />
               </div>
